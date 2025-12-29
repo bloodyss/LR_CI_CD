@@ -1,0 +1,33 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Получение кода из PR
+      - uses: actions/checkout@v4
+
+      # 2. Настройка Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # 3. Установка зависимостей
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 4. Запуск линтера Ruff
+      - name: Lint with Ruff
+        run: ruff check --config=ruff.toml ./src/
+
+      # 5. Запуск тестов Pytest
+      - name: Test with Pytest
+        run: pytest
+
+
